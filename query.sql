@@ -1,5 +1,5 @@
 -- DATASET
-CREATE TABLE IF NOT EXISTS INSCRITOS(cantidad INT, fecha DATE, fuente
+CREATE TABLE IF NOT EXISTS INSCRITOS(id SERIAL PRIMARY KEY, cantidad INT, fecha DATE, fuente
 VARCHAR);
 INSERT INTO INSCRITOS(cantidad, fecha, fuente)
 VALUES ( 44, '01/01/2021', 'Blog' );
@@ -39,7 +39,7 @@ VALUES ( 99, '01/08/2021', 'Página' );
 
 -- ¿Cuántos registros hay?
 
-SELECT COUNT(*) FROM INSCRITOS;
+SELECT COUNT(*) AS total_inscritos FROM INSCRITOS;
 
 -- ¿Cuántos inscritos hay en total?
 
