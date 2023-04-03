@@ -1,3 +1,9 @@
+-- CREATE DB
+CREATE DATABASE desafio_alex_fernandez_179;
+
+-- CONNECT TO DB
+\c desafio_alex_fernandez_179
+
 -- DATASET
 CREATE TABLE IF NOT EXISTS INSCRITOS(id SERIAL PRIMARY KEY, cantidad INT, fecha DATE, fuente
 VARCHAR);
