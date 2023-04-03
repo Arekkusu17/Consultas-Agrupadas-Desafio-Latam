@@ -88,6 +88,7 @@ SELECT ROUND(AVG(cantidad),3) AS promedio_diario_inscritos  FROM INSCRITOS;
 SELECT fecha, fuente, cantidad FROM INSCRITOS WHERE cantidad>50;
 
 -- ¿Cuántas personas se registraron en promedio cada día a partir del tercer día?
+
 SELECT AVG(cantidad) as promedio
 FROM inscritos
 WHERE fecha >= '2021-02-01';
