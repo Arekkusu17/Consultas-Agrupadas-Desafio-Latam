@@ -5,97 +5,100 @@ CREATE DATABASE desafio_alex_fernandez_179;
 \c desafio_alex_fernandez_179
 
 -- DATASET
-CREATE TABLE IF NOT EXISTS INSCRITOS(id SERIAL PRIMARY KEY, cantidad INT, fecha DATE, fuente
-VARCHAR);
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+CREATE TABLE IF NOT EXISTS inscribed(id SERIAL PRIMARY KEY, quantity INT, date DATE, source VARCHAR);
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 44, '01/01/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 56, '01/01/2021', 'Página' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 39, '01/02/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 81, '01/02/2021', 'Página' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 12, '01/03/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 91, '01/03/2021', 'Página' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 48, '01/04/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 45, '01/04/2021', 'Página' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 55, '01/05/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 33, '01/05/2021', 'Página' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 18, '01/06/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 12, '01/06/2021', 'Página' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 34, '01/07/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 24, '01/07/2021', 'Página' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 83, '01/08/2021', 'Blog' );
-INSERT INTO INSCRITOS(cantidad, fecha, fuente)
+INSERT INTO inscribed(quantity, date, source)
 VALUES ( 99, '01/08/2021', 'Página' );
 
 
 -- REQUERIMENTS
 
--- ¿Cuántos registros hay?
+-- 1 ¿Cuántos registros hay?
 
-SELECT COUNT(*) AS total_inscritos FROM INSCRITOS;
+SELECT COUNT(*) AS total_registros FROM inscribed;
 
--- ¿Cuántos inscritos hay en total?
+-- 2 ¿Cuántos inscritos hay en total?
 
-SELECT SUM(cantidad) AS sum_inscritos FROM INSCRITOS;
+SELECT SUM(quantity) AS total_enrolled FROM inscribed;
 
--- ¿Cuál o cuáles son los registros de mayor antigüedad?
+-- 3 ¿Cuál o cuáles son los registros de mayor antigüedad?
 
-SELECT * FROM INSCRITOS WHERE fecha = (
-  SELECT MIN(fecha)
-  FROM INSCRITOS
+SELECT * FROM inscribed WHERE date = (
+  SELECT MIN(date)
+  FROM inscribed
 );
 
--- ¿Cuántos inscritos hay por día? (entendiendo un día como una fecha distinta de ahora en adelante)
+-- 4 ¿Cuántos inscritos hay por día? (entendiendo un día como una date distinta de ahora en adelante)
 
-  SELECT fecha, SUM(cantidad) FROM INSCRITOS 
-  WHERE fecha < CURRENT_DATE
-  GROUP BY fecha
-  ORDER BY fecha ASC;
+SELECT date, SUM(quantity) AS registered_per_day FROM inscribed 
+GROUP BY date
+ORDER BY date ASC;
 
 
--- ¿Cuántos inscritos hay por fuente?
+-- 5 ¿Cuántos inscritos hay por source?
 
-SELECT fuente, SUM(cantidad) AS inscritos_por_fuente FROM INSCRITOS
-GROUP BY fuente;
+SELECT source, SUM(quantity) AS registered_per_source FROM inscribed
+GROUP BY source
+ORDER BY registered_per_source DESC;
 
--- ¿Qué día se inscribieron la mayor cantidad de personas y cuántas personas se inscribieron en ese día?
+-- 6 ¿Qué día se inscribieron la mayor quantity de personas y cuántas personas se inscribieron en ese día?
 
-SELECT fecha, cantidad FROM INSCRITOS
-WHERE cantidad=(
-  SELECT MAX(cantidad) FROM INSCRITOS
-);
+SELECT date, SUM(quantity) AS registered_per_day FROM inscribed
+GROUP BY date
+ORDER BY registered_per_day DESC
+LIMIT 1;
 
--- ¿Qué días se inscribieron la mayor cantidad de personas utilizando el blog y cuántas personas fueron?
+-- ¿Qué días se inscribieron la mayor quantity de personas utilizando el blog y cuántas personas fueron?
 
-SELECT fecha, fuente,cantidad FROM INSCRITOS
-WHERE cantidad=(
-  SELECT MAX(cantidad) FROM INSCRITOS 
-  WHERE fuente='Blog'
-);
+SELECT date, source,quantity FROM inscribed
+WHERE quantity=(
+  SELECT MAX(quantity) FROM inscribed 
+  WHERE source='Blog'
+)
+LIMIT 1;
 
 -- ¿Cuántas personas en promedio se inscriben en un día?
 
-SELECT ROUND(AVG(cantidad),3) AS promedio_diario_inscritos  FROM INSCRITOS;
+SELECT AVG(result.registered_per_day) FROM (
+  SELECT date, SUM(quantity) AS registered_per_day FROM inscribed GROUP BY date ORDER BY date
+  ) AS result;
 
 -- ¿Qué días se inscribieron más de 50 personas?
-SELECT fecha, fuente, cantidad FROM INSCRITOS WHERE cantidad>50;
+SELECT date, SUM(quantity) AS inscritos_diarios FROM inscribed GROUP BY date HAVING (SUM(quantity)>50) ;
 
 -- ¿Cuántas personas se registraron en promedio cada día a partir del tercer día?
 
-SELECT AVG(cantidad) as promedio
-FROM inscritos
-WHERE fecha >= '2021-02-01';
+SELECT AVG(result.registered_per_day) FROM (
+  SELECT date, SUM(quantity) AS registered_per_day FROM inscribed
+  WHERE date>='2021-03-01' GROUP BY date
+  ) AS result;
 
