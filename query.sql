@@ -4,8 +4,14 @@ CREATE DATABASE desafio_alex_fernandez_179;
 -- CONNECT TO DB
 \c desafio_alex_fernandez_179
 
--- DATASET
-CREATE TABLE IF NOT EXISTS inscribed(id SERIAL PRIMARY KEY, quantity INT, date DATE, source VARCHAR);
+-- CREATE TABLE
+
+CREATE TABLE IF NOT EXISTS inscribed(
+  id SERIAL PRIMARY KEY, 
+  quantity INT, date DATE, 
+  source VARCHAR);
+
+-- INSERT DAYA
 INSERT INTO inscribed(quantity, date, source)
 VALUES ( 44, '01/01/2021', 'Blog' );
 INSERT INTO inscribed(quantity, date, source)
